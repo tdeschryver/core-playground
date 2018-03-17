@@ -1,0 +1,14 @@
+﻿@page
+@model IndexModel
+@{
+  ViewData["Title"] = "Home page";
+}
+
+<ul>
+  @foreach (var content in @Model.Contents)
+  {
+    <li>
+      <a href="content/@content.AsUrl()">@content.Title</a>
+    </li>
+  }
+</ul>

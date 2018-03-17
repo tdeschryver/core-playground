@@ -1,0 +1,15 @@
+@page "{id}"
+@model ContentModel
+@{
+    ViewData["Title"] = @Model.Content.Title;
+}
+
+@section metatags {
+  @if (@Model.Content.TwitterCard != null) {
+    <meta name="twitter:card" content="@Model.Content.TwitterCard.Card">
+    <meta name="twitter:title" content="@Model.Content.TwitterCard.Title">
+    <meta name="twitter:Description" content="@Model.Content.TwitterCard.Description">
+  }
+}
+
+<markdown source="@Model.Content.Markdown"></markdown>
