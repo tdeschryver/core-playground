@@ -4,6 +4,16 @@
   ViewData["Title"] = "Home page";
 }
 
+@section styles {
+  <environment include="Development">
+    <link rel="stylesheet" href="~/css/index.css" />
+  </environment>
+
+  <environment exclude="Development">
+    <link rel="stylesheet" href="~/css/index.min.css" asp-append-version="true" />
+  </environment>
+}
+
 <ul>
   @foreach (var content in @Model.Contents)
   {

@@ -78,13 +78,14 @@ namespace core_playground
 
       if (_cache.TryGetValue(cacheKey, out IEnumerable<Content> content))
       {
+        _logger.LogDebug("Getting content from the cache");
         return content;
       }
 
-      int retries = 1;
-      await semaphoreSlim.WaitAsync();
       while (true)
       {
+        int retries = 1;
+        await semaphoreSlim.WaitAsync();
         try
         {
           return await TryGetContentAsync();
@@ -93,7 +94,7 @@ namespace core_playground
         {
           if (retries > 3) throw;
           _logger.LogError(e, $"Something went wrong on try {retries}");
-          await Task.Delay(TimeSpan.FromSeconds(5));
+          await Task.Delay(TimeSpan.FromMilliseconds(300));
           retries++;
         }
         finally
@@ -107,15 +108,16 @@ namespace core_playground
         IEnumerable<Content> contents = null;
         if (_cache.TryGetValue(cacheKey, out contents))
         {
+          _logger.LogDebug("Second try: getting content from the cache");
           return contents;
         }
 
         contents = await ReadContents();
-        _logger.LogDebug("Setting the cache!");
+        _logger.LogWarning("Setting the cache!");
         _cache.Set(cacheKey, contents, new MemoryCacheEntryOptions
         {
           AbsoluteExpiration = DateTime.UtcNow.AddHours(1),
-          Priority = CacheItemPriority.Normal
+          Priority = CacheItemPriority.Normal,
         });
         return contents;
       }

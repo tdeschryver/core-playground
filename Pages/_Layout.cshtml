@@ -6,10 +6,20 @@
     <title>@ViewData["Title"]</title>
 
     <environment include="Staging">
-        <meta name="robots" content="noindex, follow"/>
+      <meta name="robots" content="noindex, follow"/>
     </environment>
 
     @RenderSection("metatags", required: false)
+
+    <environment include="Development">
+      <link rel="stylesheet" href="~/css/site.css" />
+    </environment>
+
+    <environment exclude="Development">
+      <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    </environment>
+
+    @RenderSection("styles", required: false)
 </head>
 <body>
     @RenderBody()
